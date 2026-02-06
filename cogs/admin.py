@@ -83,7 +83,11 @@ class Admin(commands.Cog):
     async def global_setup(self, ctx: commands.Context):
         """グローバルチャット設定"""
         modal = GlobalSetupModal()
-        await ctx.send_modal(modal)
+        if ctx.interaction:
+            await ctx.interaction.response.send_modal(modal)
+        else:
+            # プレフィックスコマンド用の処理
+            await ctx.send("モーダルフォームはスラッシュコマンド `/global_setup` を使用してください", ephemeral=True)
     
     @commands.hybrid_command(name='global_toggle', description='グローバルチャットの有効/無効を切り替えます')
     @commands.has_permissions(administrator=True)
